@@ -9,6 +9,10 @@
    include('friendcomputer.inc');
    include('member.inc');
    include('header.php');
+   require('customisation.inc');
+   global $CUS_Category_Name;
+   global $CUS_Task_Short;
+   global $CUS_Customer_Title;
    $cxn = open_stream();
 
    $SID = $_SESSION['ID'];
@@ -60,9 +64,9 @@
 	   $result = query($cxn, $sql);
 	   echo "<form method='post'>";
 	   echo "<table><tr>";
-	   echo "<th width=300>Phone Model</th>";
-	   echo "<th width=300>Problem</th>";
-	   echo "<th width=300>Customer</th>";
+	   echo "<th width=300>$CUS_Category_Name</th>";
+	   echo "<th width=300>$CUS_Task_Short</th>";
+	   echo "<th width=300>$CUS_Customer_Title</th>";
 	   echo "<th width=300>Status</th>";
 	   echo "<th width=150>Due Date</th>";
 	   echo "</tr>";
@@ -100,8 +104,5 @@
 	   echo "<input type='hidden' name='maxRow' value=$rowcount><input type='submit' name='submit' value='Update'>";
 	   echo "</form>";
 	   
-
-
-   $version="0.1alpha";
    include ('footer.php');
 ?>

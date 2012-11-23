@@ -6,6 +6,10 @@
    include('funcs.inc');
    include('member.inc');
    include('header.php');
+   require('customisation.inc');
+   global $CUS_Category_Name;
+   global $CUS_Assigned_Employee;
+   global $CUS_Task_Summary;
    
    if($_POST['submit'] == 'submit')
    {
@@ -69,9 +73,9 @@ echo "<script type='text/javascript'>
   echo "<h2>Add Task</h2><hr>
 		<form name='aTask' method='post'>
 		<table>
-		<tr><td width=250>Handset Model:</td><td width=500><input type='text' name='phonemod' size=25 maxlength=50></td></tr>
-		<tr><td>Problem:</td><td><input type='text' name='problem' size=25 maxlength=80></td></tr>
-		<tr><td>Assigned Agent:</td><td>";
+		<tr><td width=250>$CUS_Category_Name:</td><td width=500><input type='text' name='phonemod' size=25 maxlength=50></td></tr>
+		<tr><td>$CUS_Task_Summary:</td><td><input type='text' name='problem' size=25 maxlength=80></td></tr>
+		<tr><td>$CUS_Assigned_Employee:</td><td>";
 		selectAgent('assignedAgent', $_SESSION['ID']);
   echo "</td></tr>
         <tr><td>Customer Type:</td><td>

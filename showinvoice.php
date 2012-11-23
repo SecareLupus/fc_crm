@@ -6,6 +6,13 @@
    include('funcs.inc');
    include('member.inc');
    include('invoice.inc');
+   require('customisation.inc');
+   global $CUS_Company_Name;
+   global $CUS_Company_AddressL1;
+   global $CUS_Company_AddressL2;
+   global $CUS_Company_Phone;
+   global $CUS_Company_TaxRate;
+   global $CUS_Expenses_Title;
    $cxn = open_stream();
    
    $sql = "SELECT InvoiceID from Invoices where InvoiceID='0'";
@@ -36,14 +43,14 @@
    
 	   echo "<table valign='top'>
 			<tr>
-			<td rowspan=5 height=150 width=500><img height=150 width=150 src='./data/logo.png' ALT='MRRU Logo' /></td>
-			<td width=300 align='left'>Mobile Rapid Response Unit</td></tr>
+			<td rowspan=5 height=150 width=500><img height=150 width=150 src='./data/logo.png' ALT='$CUS_Company_Name Logo' /></td>
+			<td width=300 align='left'>$CUS_Company_Name</td></tr>
 			<tr>
-			<td align='left'>48 N Pleasant Street, Suite B2</td></tr>
+			<td align='left'>$CUS_Company_AddressL1</td></tr>
 			<tr>
-			<td align='left'>Amherst, MA 01002</td></tr>
+			<td align='left'>$CUS_Company_AddressL2</td></tr>
 			<tr>
-			<td align='left'>(860)484-3466</td></tr>
+			<td align='left'>$CUS_Company_Phone</td></tr>
 			</table>";
 		  echo "<h2>";			 
 		  if ($customerType == 'Business')
@@ -75,7 +82,7 @@
 				</tr>";
 		  echo "<tr height=150 valign='top'>
 					<td width=400>
-						<b>Parts:</b>";
+						<b>$CUS_Expenses_Title:</b>";
 		  echo "<table>";
 		  for ($i = 0; $i < count($partsArray); $i++)
 		  {
@@ -138,14 +145,14 @@
 				<tr><td>Effective Rate:</td><td>";
 		  echo money($labourCost / $hours);
 		  echo " per hour</td></tr>
-				<tr><td>Parts:</td><td>";
+				<tr><td>$CUS_Expenses_Title:</td><td>";
 		  echo money($partsCost);
 		  echo "</td></tr>
 				<tr><td>Tax:</td><td>";
 		  $tax = 0;
 		  if ($customerType == 'Individual')
 		  {
-			  $tax = $partsCost * .0625;
+			  $tax = $partsCost * $CUS_Company_TaxRate;
 		  }
 		  echo money($tax);
 		  echo "</td></tr>

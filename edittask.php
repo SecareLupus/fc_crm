@@ -6,7 +6,10 @@
    include('funcs.inc');
    include('member.inc');
    include('header.php');
-   
+   require('customisation.inc');
+   global $CUS_Category_Name;
+   global $CUS_Assigned_Employee;
+   global $CUS_Task_Summary;
    $cxn = open_stream();
    
    if($_POST['submit'] == 'Update')
@@ -82,9 +85,9 @@
 
       echo "<form name='eTask' method='post'>";
       echo "<table>";
-      echo "<tr><td width=250>Phone Model:</td><td width=500><input type='text' name='phone' value='$phone' /></td></tr>";
-      echo "<tr><td>Problem Summary:</td><td><input type='text' name='problem' value='$problem' /></td></tr>";
-      echo "<tr><td>Assigned Agent:</td><td>";
+      echo "<tr><td width=250>$CUS_Category_Name:</td><td width=500><input type='text' name='phone' value='$phone' /></td></tr>";
+      echo "<tr><td>$CUS_Task_Summary:</td><td><input type='text' name='problem' value='$problem' /></td></tr>";
+      echo "<tr><td>$CUS_Assigned_Employee:</td><td>";
 		selectAgent('assignedAgent', $assignedTo);
 	  echo "</td></tr>";
       echo "<tr><td>Customer Type:</td><td>";

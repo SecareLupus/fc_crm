@@ -6,6 +6,10 @@
    include('funcs.inc');
    include('member.inc');
    include('header.php');
+   require('customisation.inc');
+   global $CUS_Category_Name;
+   global $CUS_Assigned_Employee;
+   global $CUS_Task_Summary;
    $cxn = open_stream();
    
    echo "<h2>Task Info</h2>
@@ -28,9 +32,9 @@
       extract($row);
 		//createdOn status dueDate notes
       echo "<table>";
-      echo "<tr><td width=250>Phone Model:</td><td width=500>$phone</td></tr>";
-      echo "<tr><td>Problem Summary:</td><td>$problem</td></tr>";
-      echo "<tr><td>Assigned Agent:</td><td>";
+      echo "<tr><td width=250>$CUS_Category_Name:</td><td width=500>$phone</td></tr>";
+      echo "<tr><td>$CUS_Task_Summary:</td><td>$problem</td></tr>";
+      echo "<tr><td>$CUS_Assigned_Employee:</td><td>";
 			printAgent($assignedTo, 1);
       echo "</td></tr>";
       if ($customerType == 'Business')

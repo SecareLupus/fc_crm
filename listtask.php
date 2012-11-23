@@ -6,6 +6,11 @@
    include('funcs.inc');
    include('member.inc');
    include('header.php');
+   require('customisation.inc');
+   global $CUS_Assigned_Employee;
+   global $CUS_Category_Name;
+   global $CUS_Task_Short;
+   global $CUS_Customer_Title;
    $cxn = open_stream();
    
 	   echo "<h2>Task List</h2>
@@ -39,10 +44,10 @@
 	   $result = query($cxn, $sql);
 	   echo "<table cellpadding=1 border><tr>";
 	   echo "<th>TID</th>";
-	   echo "<th>Phone Model</th>";
-	   echo "<th>Problem</th>";
-	   echo "<th>Assigned Agent</th>";
-	   echo "<th>Customer</th>";
+	   echo "<th>$CUS_Category_Name</th>";
+	   echo "<th>$CUS_Task_Short</th>";
+	   echo "<th>$CUS_Assigned_Employee</th>";
+	   echo "<th>$CUS_Customer_Title</th>";
 	   echo "<th>Ind/Bus</th>";
 	   echo "<th>Status</th>";
 	   echo "</tr>";
