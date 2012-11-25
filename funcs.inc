@@ -271,7 +271,7 @@ function displayLogin()
         Username: <input type='text' name='username'><p>
         Password: <input type='password' name='password'><p>
         <input type='submit' name='submit' value='Login'>
-        </form><p>";
+        </form><a href='forgotpassword.php'>Forgot your password?</a><p>";
 }
 
 // displayFCMessage
