@@ -10,6 +10,8 @@
    global $CUS_Category_Name;
    global $CUS_Assigned_Employee;
    global $CUS_Task_Summary;
+   global $CUS_Company_Website;
+   global $CUS_Company_CRMRoot;
    
    if($_POST['submit'] == 'submit')
    {
@@ -39,7 +41,7 @@
 			if ($row = mysqli_fetch_assoc($result))
 			{
 				extract($row);
-				echo "<a href='http://mrru.us/CRM/showtask.php?TID=$TID'>Click Here to View Task</a><hr>";
+				echo "<a href='http://" . $CUS_Company_Website . $CUS_Company_CRMRoot . "showtask.php?TID=$TID'>Click Here to View Task</a><hr>";
 			}
 			else
 			{
