@@ -79,8 +79,8 @@ echo "<script type='text/javascript'>
 		selectAgent('assignedAgent', $_SESSION['ID']);
   echo "</td></tr>
         <tr><td>Customer Type:</td><td>
-        Individual <input type='radio' name='custType[0]' value='Individual' onclick='selectRadio(0)' checked>
-        Business <input type='radio' name='custType[1]' value='Business' onclick='selectRadio(1)'>
+        Individual <input type='radio' name='custType' value='Individual' onclick='selectRadio(0)' checked>
+        Business <input type='radio' name='custType' value='Business' onclick='selectRadio(1)'>
         </td></tr>
         <tr><td>Customer:</td><td>";
         selectCustomer('customerInd', (($_GET['cType'] == 'I' && !empty($_GET['custID'])) ? $_GET['custID'] : -1));
