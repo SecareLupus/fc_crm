@@ -24,7 +24,7 @@
 	function printMemberString($num, $order)
 	{
 	   $cxn = open_stream();
-	   $sql = "SELECT fname, lname FROM Agents WHERE ID='$num'";
+	   $sql = "SELECT fname, lname FROM Agents WHERE AID='$num'";
 	   $result = query($cxn, $sql);
 	   if(!$row = mysqli_fetch_assoc($result)) return FALSE;
 	   extract($row);
@@ -62,7 +62,7 @@
 			   $memID = $row['member'];
 			   $newpass = $_POST['newpass'];
 			   $newpass = hash('sha256', $newpass);
-			   $sql = "UPDATE Agents SET password='$newpass' WHERE ID='$memID'";
+			   $sql = "UPDATE Agents SET password='$newpass' WHERE AID='$memID'";
 			   if ($result = query($cxn, $sql))
 			   {
 				   $sql = "DELETE FROM passwordReset WHERE (member='$memID' OR (NOW() > expires))";

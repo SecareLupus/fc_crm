@@ -9,6 +9,8 @@ $CUS_Company_AddressL1 = "48 N Pleasant Street, Suite B2";
 $CUS_Company_AddressL2 = "Amherst, MA 01002";
 $CUS_Company_Phone = "(860)484-3466";
 $CUS_Company_TaxRate = 6.25 * .01;
+$CUS_Company_Website = "www.mrru.us/";
+$CUS_Company_CRMRoot = "CRM/";
 
 //Employee Title
 //Replace this with your company's title for 

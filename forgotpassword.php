@@ -4,6 +4,7 @@
    require('customisation.inc');
    global $CUS_Company_Name;
    global $CUS_Company_Website;
+   global $CUS_Company_CRMRoot;
    
 	//Certain functions need to be included without including funcs.inc, as funcs enforces login on all pages
    
@@ -14,7 +15,7 @@
 	{
 	   if(!$result = mysqli_query($cxn, $sql))
 	   {
-		  displayError("Query Error!<br>Query: $sql<br>SQL Error: " . mysqli_error($cxn));
+		  //displayError("Query Error!<br>Query: $sql<br>SQL Error: " . mysqli_error($cxn));
 		  return (FALSE);
 	   }
 	   else return ($result);
@@ -27,7 +28,7 @@
 	function printMemberString($num, $order)
 	{
 	   $cxn = open_stream();
-	   $sql = "SELECT fname, lname FROM Agents WHERE ID='$num'";
+	   $sql = "SELECT fname, lname FROM Agents WHERE AID='$num'";
 	   $result = query($cxn, $sql);
 	   if(!$row = mysqli_fetch_assoc($result)) return FALSE;
 	   extract($row);
@@ -100,15 +101,15 @@
 			   $tmpstring = $now . $row['password'] . $row['email'];
 			   $emailhash = hash('sha256',$tmpstring);
 			   
-			   $sql = "SELECT * FROM passwordReset WHERE (member='" . $row['ID'] . "' AND (NOW() < expires))";
+			   $sql = "SELECT * FROM passwordReset WHERE (member='" . $row['AID'] . "' AND (NOW() < expires))";
 			   $result = query($cxn, $sql);
 			   if($tmp = mysqli_fetch_assoc($result))
 			   {
-					$sql = "UPDATE passwordReset SET hash='$emailhash', expires='$expires' WHERE (member='" . $row['ID'] . "' AND (NOW() < expires))";
+					$sql = "UPDATE passwordReset SET hash='$emailhash', expires='$expires' WHERE (member='" . $row['AID'] . "' AND (NOW() < expires))";
 			   }
 			   else
 			   {
-				   $sql = "INSERT INTO passwordReset (member, hash, expires) VALUES ('" . $row['ID'] . "', '$emailhash', '$expires')";
+				   $sql = "INSERT INTO passwordReset (member, hash, expires) VALUES ('" . $row['AID'] . "', '$emailhash', '$expires')";
 			   }
 			   if ($result = query($cxn, $sql))
 			   {
@@ -124,14 +125,14 @@
 							"will be asked to input a new password.\n\n" .
 							
 							"Click here, and paste this code into the provided box:\n$emailhash\n\n" .
-							"www.worldsapartgames.org/fc/resetpassword.php?reset=$emailhash\n\n" .
+							$CUS_Company_Website . $CUS_Company_CRMRoot . "resetpassword.php?reset=$emailhash\n\n" .
 							
 							"This link will expire 7 days from the initial request.\n\n" .
 
 							"Thanks for being a great citizen!\n" .
 							"High Programmer\n" .
 							"$CUS_Company_Name\n" .
-							"$CUS_Company_Web";
+							"$CUS_Company_Website";
 				  if(mail($row['email'], $subject, $body))
 				  {
 					 echo "Message sent to " . printMemberString($row['ID'], 1) . "<br>";
