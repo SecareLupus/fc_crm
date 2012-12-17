@@ -70,7 +70,7 @@
 	{
 		$newAgents = scandir('./import/Agents', 1);
 		$newContacts = scandir('./import/Contacts', 1);
-		$newBusinesses = scandir('./import/Businesses', 1);
+		//$newBusinesses = scandir('./import/Businesses', 1);
 		$newTasks = scandir('./import/Tasks', 1);
 		
 		$o=new CSVData();
@@ -81,9 +81,9 @@
 		$o->getData('./import/Contacts/' . $newContacts[0]);
 		$newContactData=$o->data;
 		
-		$o=new CSVData();
-		$o->getData('./import/Businesses/' . $newBusinesses[0]);
-		$newBusinessData=$o->data;
+		//$o=new CSVData();
+		//$o->getData('./import/Businesses/' . $newBusinesses[0]);
+		//$newBusinessData=$o->data;
 		
 		$o=new CSVData();
 		$o->getData('./import/Tasks/' . $newTasks[0]);
