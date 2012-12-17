@@ -30,6 +30,11 @@
 		<a href='listtask.php'>Task List</a><br>";
    
    echo "<hr>";
+   
+   echo "<b>My Account</b><br>
+		<a href='accountsettings.php'>Account Info</a><br>";
+		
+   echo "<hr>";
 
    echo "<b><a href='index.php?logout=1'>Logout</a></b>";
 
