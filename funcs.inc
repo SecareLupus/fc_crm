@@ -410,13 +410,14 @@ function login($username, $password)
    }
 
    $pwdhash = hash('sha256',$password);
-   $query = "SELECT * FROM Agents WHERE fname='$fname' AND lname='$lname' AND password='$pwdhash'";
+   $query = "SELECT * FROM Agents WHERE ((fname='$fname' AND lname='$lname') OR username='$username') AND password='$pwdhash'";
 
    if($result = query($stream, $query))
    {
       if(($row = mysqli_fetch_assoc($result)) && ($row['status'] != -1))
       {
          $_SESSION['ID'] = $row['AID'];
+         //$_SESSION['SecClear'] = $row['SecClear'];
          mysqli_free_result($result);
          mysqli_close($stream);
          unset($_POST['username']); // to make sure it does not trip up safePost
