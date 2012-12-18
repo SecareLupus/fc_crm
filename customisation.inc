@@ -11,6 +11,7 @@ $CUS_Company_Phone = "(860)484-3466";
 $CUS_Company_TaxRate = 6.25 * .01;
 $CUS_Company_Website = "www.mrru.us/";
 $CUS_Company_CRMRoot = "CRM/";
+$CUS_Company_Email = "info@mrru.us";
 
 //Employee Title
 //Replace this with your company's title for 
