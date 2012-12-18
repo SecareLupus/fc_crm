@@ -8,6 +8,7 @@
    include('header.php');
    require('customisation.inc');
    global $CUS_Company_Email;
+   global $CUS_Employee_Title;
    
    if($_POST['submit'] == 'Send')
    {
@@ -34,8 +35,8 @@
 		{
 			//echo "DEBUG: email fetched!<br>";
 			$emailheader = "from: $CUS_Company_Email
-					$CUS_Company_Email
-					X-Mailer: PHP/" . phpversion();
+					$CUS_Company_Email";
+					//X-Mailer: PHP/" . phpversion();
 					
 			if(mail($row['email'], $emailsubject, $emailbody, $emailheader))
 			{
@@ -76,7 +77,7 @@ echo "<script type='text/javascript'>
 		<form name='email' method='post'>
 		<table>";
   echo "<tr><td width=150>Recipient Type:</td><td>
-        Agent <input type='radio' name='contactType' value='Agent' onclick='selectRadio(0)' checked>
+        $CUS_Employee_Title <input type='radio' name='contactType' value='Agent' onclick='selectRadio(0)'>
         Contact <input type='radio' name='contactType' value='Contact' onclick='selectRadio(1)'>
         </td></tr>";
   echo "<tr><td>Recipient:</td><td>";
