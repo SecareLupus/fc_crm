@@ -55,20 +55,22 @@ echo "<script type='text/javascript'>
 	 function initForm(){
 		document.forms['email']['contactAgent'].disabled=false;
 		document.forms['email']['contactInd'].disabled=true;
+		document.getElementById('contTyAgen').checked = true;
+		document.getElementById('contTyCont').checked = false;
 	 }
 	 
 	 function selectRadio(n){ 
 	 if(n==0){
 		document.forms['email']['contactAgent'].disabled=false;
 		document.forms['email']['contactInd'].disabled=true;
-		document.forms['email']['contactType[0]'].checked=true;
-		document.forms['email']['contactType[1]'].checked=false;
+		document.getElementById('contTyAgen').checked = true;
+		document.getElementById('contTyCont').checked = false;
 	 }
 	 if(n==1){
 		document.forms['email']['contactAgent'].disabled=true;
 		document.forms['email']['contactInd'].disabled=false;
-		document.forms['email']['contactType[0]'].checked=false;
-		document.forms['email']['contactType[1]'].checked=true;
+		document.getElementById('contTyAgen').checked = false;
+		document.getElementById('contTyCont').checked = true;
 	 }
 	 } 
 	 </script>";
@@ -77,26 +79,26 @@ echo "<script type='text/javascript'>
 		<form name='email' method='post'>
 		<table>";
   echo "<tr><td width=150>Recipient Type:</td><td>
-        $CUS_Employee_Title <input type='radio' name='contactType' value='Agent' onclick='selectRadio(0)'>
-        Contact <input type='radio' name='contactType' value='Contact' onclick='selectRadio(1)'>
+        $CUS_Employee_Title <input type='radio' id='contTyAgen' name='contactType' value='Agent' onclick='selectRadio(0)'>
+        Contact <input type='radio' id='contTyCont' name='contactType' value='Contact' onclick='selectRadio(1)'>
         </td></tr>";
   echo "<tr><td>Recipient:</td><td>";
 		selectAgent('contactAgent', (($_GET['eType'] == 'A' && !empty($_GET['recipID'])) ? $_GET['recipID'] : -1));
         selectCustomer('contactInd', (($_GET['eType'] == 'C' && !empty($_GET['recipID'])) ? $_GET['recipID'] : -1));
   echo "</td></tr><br>";
   echo "<tr><td>Subject:</td><td width=500><input type='text' name='emailsubject' size=75 maxlength=150></td></tr>";
-  echo "<script type='text/javascript'>initForm();</script></td></tr>";
   echo "<tr><td valign='top'>Email:</td><td><textarea cols=60 rows=20 name='emailbody'></textarea></td></tr>
 		<tr><td>&nbsp;</td><td align='right'><input type='submit' name='submit' value='Send'></td></tr></table>
         </form>";
+  echo "<script type='text/javascript'>initForm();</script>";
         
 	if($_GET['eType'] == 'A')
 	{
 		echo "<script type='text/javascript'>
 			  document.forms['email']['contactAgent'].disabled=false;
 			  document.forms['email']['contactInd'].disabled=true;
-			  document.forms['email']['contactType[0]'].checked=true;
-			  document.forms['email']['contactType[1]'].checked=false;
+			  document.getElementById('contTyAgen').checked = true;
+			  document.getElementById('contTyCont').checked = false;
 			  </script>";
 	}
 	elseif($_GET['eType'] == 'C')
@@ -104,8 +106,8 @@ echo "<script type='text/javascript'>
 		echo "<script type='text/javascript'>
 			  document.forms['email']['contactAgent'].disabled=true;
 			  document.forms['email']['contactInd'].disabled=false;
-			  document.forms['email']['contactType[0]'].checked=false;
-			  document.forms['email']['contactType[1]'].checked=true;
+			  document.getElementById('contTyAgen').checked = false;
+			  document.getElementById('contTyCont').checked = true;
 			  </script>";
 	}
         
