@@ -42,7 +42,7 @@
       echo "<tr><td>Tax Exempt Number:</td><td>$taxexempt</td></tr>";
       echo "</table>";
       $BID = $_GET['BID'];
-      echo "<table><td width=100><a href='editbusiness.php?BID=$BID'>Edit Business</a></td><td width=100><a href='addtask.php?cType=B&custID=$BID'>Create Task</a></td></table>";
+      echo "<table><td width=100><a href='editbusiness.php?BID=$BID'>Edit Business</a></td><td width=100><a href='sendemail.php?eType=C&recipID=$contactCID'>Email Contact</a></td><td width=100><a href='addtask.php?cType=B&custID=$BID'>Create Task</a></td></table>";
    }
    echo "<hr>";
    $countrows = 0;

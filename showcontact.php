@@ -38,7 +38,7 @@
       echo "</table>";
       $CID = $_GET['CID'];
       echo "";
-      echo "<table><td width=100><a href='editcontact.php?CID=$CID'>Edit Customer</a></td><td width=100><a href='addtask.php?cType=I&custID=$CID'>Create Task</a></td></table>";
+      echo "<table><td width=100><a href='editcontact.php?CID=$CID'>Edit Customer</a></td><td width=100><a href='sendemail.php?eType=C&recipID=$CID'>Email Contact</a></td><td width=100><a href='addtask.php?cType=I&custID=$CID'>Create Task</a></td></table>";
    }
    echo "<hr>";
    
