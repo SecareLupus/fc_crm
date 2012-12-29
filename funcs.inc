@@ -313,11 +313,11 @@ function formPhoneNumber($raw)
 	
    if(strlen($raw) == 11)
    {
-      return ('(' . substr($raw, 1, 3) . ')' . substr($raw, 4, 3) . '-' . substr($raw, 7, 4));
+      return ('(' . substr($raw, 1, 3) . ') ' . substr($raw, 4, 3) . '-' . substr($raw, 7, 4));
    }
    if(strlen($raw) == 10)
    {
-      return ('(' . substr($raw, 0, 3) . ')' . substr($raw, 3, 3) . '-' . substr($raw, 6, 4));
+      return ('(' . substr($raw, 0, 3) . ') ' . substr($raw, 3, 3) . '-' . substr($raw, 6, 4));
    }
    if(strlen($raw) == 7)
    {
