@@ -30,7 +30,7 @@ function fcMessage($message)
 
    echo "<table border width=100%><tr><td><h2>Messages from Friend Computer</h2>";
    echo "Greetings Agent #$SID<br>
-         Current MRRU Official Time: $date<p>";
+         Current Official Time: $date<p>";
    
    if($message != '')
    {

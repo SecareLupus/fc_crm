@@ -31,7 +31,7 @@
 			if ($row = mysqli_fetch_assoc($result))
 			{
 				extract($row);
-				echo "<a href='http://mrru.us/CRM/showcontact.php?CID=$CID'>Click Here to View Customer</a><hr>";
+				echo "<a href='showcontact.php?CID=$CID'>Click Here to View Customer</a><hr>";
 			}
 			else
 			{

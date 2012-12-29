@@ -2,6 +2,8 @@
 session_start();
 
 include('config.inc'); // include specific info for specific database
+require('customisation.inc');
+   global $CUS_Company_Email;
 
    if(!$_SESSION['loggedin'])
    {
@@ -18,9 +20,7 @@ include('config.inc'); // include specific info for specific database
       }
    }
 
-$ADMINEMAIL = "info@mrru.us";
-
-$IMAGEROOT = "http://www.worldsapartgames.org/productimages/";
+$ADMINEMAIL = $CUS_Company_Email;
 
 // megaStrip
 // strips slashes from GET, POST, and COOKIE
@@ -244,7 +244,7 @@ function displayRefs($start, $ID)
 // arguments: string containing error message
 function displayError($message)
 {
-   $WEBMASTER = "webmaster@pvgaming.org";
+   $WEBMASTER = $CUS_Company_Email;
 
    echo"<font color=RED>$message<br>
         Please contact the webmaster about this problem at <a href='mailto:$WEBMASTER'>$WEBMASTER</a></font><p>";
@@ -428,8 +428,6 @@ function login($username, $password)
       else
       {
          echo "Login Failed.<br>";
-         echo "Username:  $fname  $lname <br>";
-         echo "Password: " . $pwdhash . "<br>";
          mysqli_free_result($result);
          mysqli_close($stream);
          return FALSE;
@@ -824,7 +822,7 @@ function reportBug($page)
 
             SESSION data: $session\n";
 
-   if(mail('info@mrru.us', "FC/$page Bug Report", $body))
+   if(mail($CUS_Company_Email, "FC/$page Bug Report", $body))
    {
       echo "<table border><tr><td><b>Message From Friend Computer</b><br>
             The following bug report has been sent to the High Programmers<br>

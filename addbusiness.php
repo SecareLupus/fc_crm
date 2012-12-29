@@ -33,7 +33,7 @@
 			if ($row = mysqli_fetch_assoc($result))
 			{
 				extract($row);
-				echo "<a href='http://mrru.us/CRM/showbusiness.php?BID=$BID'>Click Here to View Business</a><hr>";
+				echo "<a href='showbusiness.php?BID=$BID'>Click Here to View Business</a><hr>";
 			}
 			else
 			{
