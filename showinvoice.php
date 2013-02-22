@@ -14,6 +14,7 @@
    global $CUS_Company_TaxRate;
    global $CUS_Expenses_Title;
    $cxn = open_stream();
+   $invoiceshowemail = true;
    
    $sql = "SELECT InvoiceID from Invoices where InvoiceID='0'";
 	if($_GET['InvID'])
@@ -166,9 +167,18 @@
 		  echo "<table>
 				<tr><td width=300>Name:</td><td width=300>";
 				printAgent($assignedTo, 1);
-		  echo "</td></tr>
+		  if ($customerType == 'Individual')
+		  {
+			echo "</td></tr>
 				<tr><td>For:</td><td>";
 				printCustomer($customerID, 1);
+		  }
+		  else
+		  {
+			echo "</td></tr>
+				<tr><td>For:</td><td>";
+				printBusinessContact($customerID, 1);
+		  }
 		  echo "</td></tr>
 				<tr><td>Date:</td><td>$dateInvoiced</td></tr>
 				</table>";
