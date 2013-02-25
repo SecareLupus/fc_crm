@@ -42,12 +42,12 @@
 	  $actionArray[] = $_POST['addAction'];
 	  $thisInvoice->setActionsTaken($actionArray);
 	}
-	elseif($_POST['submit'] == 'Edit Action')
+	elseif($_POST['submit'] == 'Edit Action' && isset($_POST['currActions']))
 	{
 		$editAction = $_POST['currActions'];
 		$_POST['submit'] = 'Delete Action';
 	}
-	if($_POST['submit'] == 'Delete Action')
+	if($_POST['submit'] == 'Delete Action' && isset($_POST['currActions']))
 	{
 		for ($i = 0; $i < count($actionArray); $i++)
 		{
@@ -67,12 +67,12 @@
 		$labourArray[] = new Labour($_POST['addLabour'], $_POST['addLabourHours'], $_POST['addLabourRate']);
 		$thisInvoice->setLabour($labourArray);
 	}
-	elseif($_POST['submit'] == 'Edit Labour')
+	elseif($_POST['submit'] == 'Edit Labour' && isset($_POST['currLabour']))
 	{
 		$editLabour = InvoiceLister::csv_to_list($_POST['currLabour']);
 		$_POST['submit'] = 'Delete Labour';
 	}
-	if($_POST['submit'] == 'Delete Labour')
+	if($_POST['submit'] == 'Delete Labour' && isset($_POST['currLabour']))
 	{
 	  $currLabour = Labour::labourFromString($_POST['currLabour']);
 	  for ($i = 0; $i < count($labourArray); $i++)
@@ -93,12 +93,12 @@
 	  $partsArray[] = new Parts($_POST['addPart'], $_POST['addPartQty'], $_POST['addPartCost'], $_POST['addPartTaxed']);	  
 	  $thisInvoice->setParts($partsArray);
 	}
-	elseif($_POST['submit'] == 'Edit Part')
+	elseif($_POST['submit'] == 'Edit Part' && isset($_POST['currParts']))
 	{
 		$editParts = InvoiceLister::csv_to_list($_POST['currParts']);
 		$_POST['submit'] = 'Delete Part';
 	}
-	if($_POST['submit'] == 'Delete Part')
+	if($_POST['submit'] == 'Delete Part' && isset($_POST['currParts']))
 	{
 	  $currParts = Parts::partsFromString($_POST['currParts']);
 	  for ($i = 0; $i < count($partsArray); $i++)
@@ -141,8 +141,14 @@
 		
 	echo "</td></tr><tr><td width='400'>";
 	//Parts Form
+	$checkbox = "<input type='checkbox' name='addPartTaxed' width='15%'";
+	if(isset($editParts) && $editParts[3] != "")
+	{
+		$checkbox .= " checked";
+	}
+	$checkbox .= ">";
 	echo "<form method='post'><table>
-		<tr><td width=350>Part:<input type='text' name='addPart' value='" . $editParts[0] . "' width='50%'><br>Qty:<input type='text' name='addPartQty' value='" . $editParts[1] . "' width='15%'><br>Unit Price:<input type='text' name='addPartCost' value='" . $editParts[2] . "' width='15%'><br>Taxed:<input type='checkbox' name='addPartTaxed' checked='" . $editParts[3] . "' width='15%'><input type='submit' name='submit' value='Add Part' width='20%'></td></tr>
+		<tr><td width=350>Part:<input type='text' name='addPart' value='" . $editParts[0] . "' width='50%'><br>Qty:<input type='text' name='addPartQty' value='" . $editParts[1] . "' width='15%'><br>Unit Price:<input type='text' name='addPartCost' value='" . $editParts[2] . "' width='15%'><br>Taxed:$checkbox<input type='submit' name='submit' value='Add Part' width='20%'></td></tr>
 		<tr><td width=350 align='center'><select name='currParts' size=5 width='100%'>";
 	for ($i = 0; $i < count($partsArray); $i++)
 	{
