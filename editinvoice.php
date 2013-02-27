@@ -114,33 +114,41 @@
 	}
 	//actionsTaken	parts	labour	reccs
 
-	echo "<table><tr><td width='400'>";
 	//Actions Taken Form
+	echo "<h2>Actions Taken</h2>";
 	echo "<form method='post'><table>
-		<tr><td width=350 align='center'>Action:<input type='text' name='addAction' value='$editAction' width='75%'><input type='submit' name='submit' value='Add Action' width='25%'></td></tr>
-		<tr><td width=350 align='center'><select name='currActions' size=5 width='100%'>";
+		<tr><td width=700 align='left'>Action:<input type='text' name='addAction' value='$editAction' width='75%'><input type='submit' name='submit' value='Add Action' width='25%'></td></tr>
+		<tr><td><select name='currActions' size=5 width='100%'>";
 	for ($i = 0; $i < count($actionArray); $i++)
 	{
 	  echo "<option value='" . $actionArray[$i] . "' width='100%'>" . $actionArray[$i] . "</option>";
 	}
-	echo "</select></td></tr>
-		<tr><td width=350 align='center'><input type='submit' name='submit' value='Edit Action' width='50%'><input type='submit' name='submit' value='Delete Action' width='50%'></td></tr></table></form>";
-
-	echo "</td><td width='400'>";
-	//Labour Form
-	echo "<form method='post'><table>
-		<tr><td width=350>Desc:<input type='text' name='addLabour' value='" . $editLabour[0] . "' width='50%'><br>Hours:<input type='text' name='addLabourHours' value='" . $editLabour[1] . "' width='15%'><br>Rate:<input type='text' name='addLabourRate' value='" . $editLabour[2] . "' width='15%'><input type='submit' name='submit' value='Add Labour' width='20%'></td></tr>
-		<tr><td width=350 align='center'><select name='currLabour' size=5 width='100%'>";
-	for ($i = 0; $i < count($labourArray); $i++)
+	if(count($actionArray) == 0)
 	{
-	  echo "<option value='\"" . $labourArray[$i]->getName() . "\",\"" . $labourArray[$i]->getHours() . "\",\"" . $labourArray[$i]->getRate() . "\"'>" . $labourArray[$i]->getName() . "&nbsp;-&nbsp;" . $labourArray[$i]->getHours() . "&nbsp;@&nbsp;" . $labourArray[$i]->getRate() . "</option>";
+		echo "<option value='' width='100%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No Actions Listed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
 	}
 	echo "</select></td></tr>
-		<tr><td width=350 align='center'><input type='submit' name='submit' value='Edit Labour' width='50%'><input type='submit' name='submit' value='Delete Labour' width='50%'></td></tr>
+		<tr><td align='left'><input type='submit' name='submit' value='Edit Action' width='50%'><input type='submit' name='submit' value='Delete Action' width='50%'></td></tr></table></form>";
+
+	//Labour Form
+	echo "<h2>Billable Labour</h2>";
+	echo "<form method='post'><table>
+		<tr><td width=700 align='left'>Desc:<input type='text' name='addLabour' value='" . $editLabour[0] . "' width='50%'><br>Hours:<input type='text' name='addLabourHours' value='" . $editLabour[1] . "' width='15%'><br>Rate:<input type='text' name='addLabourRate' value='" . $editLabour[2] . "' width='15%'><input type='submit' name='submit' value='Add Labour' width='20%'></td></tr>
+		<tr><td><select name='currLabour' size=5 width='100%'>";
+	for ($i = 0; $i < count($labourArray); $i++)
+	{
+	  echo "<option value='\"" . $labourArray[$i]->getName() . "\",\"" . $labourArray[$i]->getHours() . "\",\"" . $labourArray[$i]->getRate() . "\"'>" . $labourArray[$i]->getName() . ", " . $labourArray[$i]->getHours() . " hours at " . money($labourArray[$i]->getRate()) . " per Hour</option>";
+	}
+	if(count($labourArray) == 0)
+	{
+		echo "<option value='' width='100%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No Labor Listed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
+	}
+	echo "</select></td></tr>
+		<tr><td align='left'><input type='submit' name='submit' value='Edit Labour' width='50%'><input type='submit' name='submit' value='Delete Labour' width='50%'></td></tr>
 		</table></form>";
 		
-	echo "</td></tr><tr><td width='400'>";
 	//Parts Form
+	echo "<h2>Parts</h2>";
 	$checkbox = "<input type='checkbox' name='addPartTaxed' width='15%'";
 	if(isset($editParts) && $editParts[3] != "")
 	{
@@ -148,17 +156,34 @@
 	}
 	$checkbox .= ">";
 	echo "<form method='post'><table>
-		<tr><td width=350>Part:<input type='text' name='addPart' value='" . $editParts[0] . "' width='50%'><br>Qty:<input type='text' name='addPartQty' value='" . $editParts[1] . "' width='15%'><br>Unit Price:<input type='text' name='addPartCost' value='" . $editParts[2] . "' width='15%'><br>Taxed:$checkbox<input type='submit' name='submit' value='Add Part' width='20%'></td></tr>
-		<tr><td width=350 align='center'><select name='currParts' size=5 width='100%'>";
+		<tr><td width=700 align='left'>Part:<input type='text' name='addPart' value='" . $editParts[0] . "' width='50%'><br>Qty:<input type='text' name='addPartQty' value='" . $editParts[1] . "' width='15%'><br>Unit Price:<input type='text' name='addPartCost' value='" . $editParts[2] . "' width='15%'><br>Taxed:$checkbox<input type='submit' name='submit' value='Add Part' width='20%'></td></tr>
+		<tr><td><select name='currParts' size=5 width='100%'>";
 	for ($i = 0; $i < count($partsArray); $i++)
 	{
-	  echo "<option value='\"" . $partsArray[$i]->getName() . "\",\"" . $partsArray[$i]->getQty() . "\",\"" . $partsArray[$i]->getUnitCost() . "\",\"" . $partsArray[$i]->isTaxed() . "\"'>" . $partsArray[$i]->getName() . "&nbsp;-&nbsp;" . $partsArray[$i]->getQty() . "&nbsp;@&nbsp;" . $partsArray[$i]->getUnitCost() . "</option>";
+	  
+	  $taxString = "";
+	  
+	  if($partsArray[$i]->isTaxed())
+	  {
+		  $taxString = "Taxed";
+	  }
+	  else
+	  {
+		  $taxString = "Not Taxed";
+	  }
+	  $valuearray = array($partsArray[$i]->getName(), $partsArray[$i]->getQty(), $partsArray[$i]->getUnitCost, $partsArray[$i]->isTaxed());
+	  $valuecsv = InvoiceLister::list_to_csv($valuearray);
+	  echo "<option
+		  value='$valuecsv'>" . $partsArray[$i]->getName() . ", QTY:" . $partsArray[$i]->getQty() . ", " . money($partsArray[$i]->getUnitCost()) . "ea, $taxString</option>";
+	}
+	if(count($partsArray) == 0)
+	{
+		echo "<option value='' width='100%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No Parts Listed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>";
 	}
 	echo "</select></td></tr>
-		<tr><td width=350 align='center'><input type='submit' name='submit' value='Edit Part' width='50%'><input type='submit' name='submit' value='Delete Part' width='50%'></td></tr>
+		<tr><td align='left'><input type='submit' name='submit' value='Edit Part' width='50%'><input type='submit' name='submit' value='Delete Part' width='50%'></td></tr>
 		</table></form>";
 		
-	echo "</td></tr></table>";
 	
 	echo "<a href='showinvoice.php?InvID=$invID' target='_blank'>View Invoice</a>";
 	
