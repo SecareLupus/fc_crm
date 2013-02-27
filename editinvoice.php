@@ -171,7 +171,7 @@
 	  {
 		  $taxString = "Not Taxed";
 	  }
-	  $valuearray = array($partsArray[$i]->getName(), $partsArray[$i]->getQty(), $partsArray[$i]->getUnitCost, $partsArray[$i]->isTaxed());
+	  $valuearray = array($partsArray[$i]->getName(), $partsArray[$i]->getQty(), $partsArray[$i]->getUnitCost(), $partsArray[$i]->isTaxed());
 	  $valuecsv = InvoiceLister::list_to_csv($valuearray);
 	  echo "<option
 		  value='$valuecsv'>" . $partsArray[$i]->getName() . ", QTY:" . $partsArray[$i]->getQty() . ", " . money($partsArray[$i]->getUnitCost()) . "ea, $taxString</option>";
