@@ -32,6 +32,11 @@ class Parts
 		return $this->qty;
 	}
 	
+	public function getTotalCost()
+	{
+		return ($this->unitCost * $this->qty);
+	}
+	
 	public function isTaxed()
 	{
 		return $this->tax;
