@@ -23,12 +23,24 @@
 	{
 		die("No Invoice chosen.<hr>");
 	}
+	
+	if($_POST['submit'] == 'Pay Invoice')
+	{
+		if ($_POST['confirmPayInvoice'])
+		{
+			$thisInvoice->setPaid();
+		}
+		else
+		{
+			echo "Check Confirm Box to Confirm Payment<br>";
+		}
+	}
 
 	if ($thisInvoice->isPaid())
 	{
 	  echo "Paid invoices may not be edited further.<br>";
-	  echo "<a href='showinvoice.php?InvID=$InvoiceID'>View Invoice</a><br>";
-	  include('footer');
+	  echo "<a href='showinvoice.php?InvID=$invID'>View Invoice</a><br>";
+	  include ('footer.php');
 	  die();
 	}
 
@@ -183,6 +195,8 @@
 	echo "</select></td></tr>
 		<tr><td align='left'><input type='submit' name='submit' value='Edit Part' width='50%'><input type='submit' name='submit' value='Delete Part' width='50%'></td></tr>
 		</table></form>";
+		
+	echo "<form method='post'><table><tr><td><input type='checkbox' name='confirmPayInvoice'>Confirm Payment</input></td><td><input type='submit' name='submit' value='Pay Invoice'></td></tr></table></form>";
 		
 	
 	echo "<a href='showinvoice.php?InvID=$invID' target='_blank'>View Invoice</a>";

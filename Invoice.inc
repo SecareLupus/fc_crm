@@ -36,7 +36,7 @@ class Invoice
 		$this->labourArr = Labour::labourFromString($contactRow['labour']);
 		$this->reccs = InvoiceLister::csv_to_list($contactRow['reccs']);
 		$this->dateInv = $contactRow['dateInvoiced'];
-		$this->paid = $contactRow['paid'];
+		$this->paid = ($contactRow['paid'] == 1);
 	}
 	
 	public function getActionsTaken()
@@ -148,7 +148,7 @@ class Invoice
 	
 	public function setPaid()
 	{
-		if(self::updateInvoice($this->id, 'paid', 'true'))
+		if(self::updateInvoice($this->id, 'paid', '1'))
 		{
 			$this->paid = true;
 			return true;

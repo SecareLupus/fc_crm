@@ -8,6 +8,7 @@
    include('header.php');
    include_once('Task.inc');
    include_once('Business.inc');
+   include_once('Invoice.inc');
    require('customisation.inc');
    global $CUS_Category_Name;
    global $CUS_Assigned_Employee;
@@ -67,9 +68,10 @@
   $invID = $thisTask->getInvoice();
   if ($invID >= 0)
   {
-	  if (false)
+	  $tmpInvoice = new Invoice($invID);
+	  if ($tmpInvoice->isPaid())
 	  {
-		  echo "<a href='showinvoice.php?InvID=$InvoiceID'>View Invoice</a>";
+		  echo "<a href='showinvoice.php?InvID=$invID'>View Invoice</a>";
 	  }
 	  else
 	  {
