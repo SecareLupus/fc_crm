@@ -31,23 +31,10 @@
 	$actionsArray = $thisInvoice->getActionsTaken();
 	$labourArray = $thisInvoice->getLabourArray();
 	$partsArray = $thisInvoice->getPartsArray();
-	$labourCost = 0.00;
-	$totalHours = 0.0;
-	for($i = 0; $i < count($labourArray); $i++)
-	{
-		$labourCost += $labourArray[$i]->getCost();
-		$totalHours += $labourArray[$i]->getHours();
-	}
-	$partsCost = 0.00;
-	$taxCost = 0.00;
-	for($i = 0; $i < count($partsArray); $i++)
-	{
-		$partsCost += $partsArray[$i]->getCost();
-		if ($partsArray[$i]->isTaxed())
-		{
-			$taxCost += ($partsArray[$i]->getCost() * $CUS_Company_TaxRate);
-		}
-	}
+	$labourCost = $thisInvoice->getLabourCost();
+	$totalHours = $thisInvoice->getLabourHours();
+	$partsCost = $thisInvoice->getPartsCost();
+	$taxCost = $thisInvoice->getPartsTax($CUS_Company_TaxRate);
 
 	echo "<table valign='top'>
 		<tr>

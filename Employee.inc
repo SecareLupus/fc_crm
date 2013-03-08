@@ -76,13 +76,13 @@ class Employee
 		$tmpTasks = array();
 		
 		$sql = "";
-		if ($status = 'All')
+		if ($status == 'All')
 		{
 			$sql = "SELECT TID FROM Tasks WHERE assignedTo=$this->id";
 		}
 		else
 		{
-			if (!invert)
+			if (!$invert)
 			{
 				$sql = "SELECT TID FROM Tasks WHERE assignedTo=$this->id AND status='$status'";
 			}

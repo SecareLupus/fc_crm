@@ -24,6 +24,11 @@ class Task
 		$this->description = $contactRow['notes'];
 	}
 	
+	public function getID()
+	{
+		return $this->id;
+	}
+	
 	public function getCategory()
 	{
 		return $this->category;
@@ -135,7 +140,7 @@ class Task
 	public function setCategory($newVal)
 	{
 		//Is this safe?
-		if (self::updateTask($id, 'phone', $newVal))
+		if (self::updateTask($this>id, 'phone', $newVal))
 		{
 			$category = $newVal;
 			return true;
@@ -146,7 +151,7 @@ class Task
 	public function setSummary($newVal)
 	{
 		//Is this safe?
-		if (self::updateTask($id, 'problem', $newVal))
+		if (self::updateTask($this->id, 'problem', $newVal))
 		{
 			$summary = $newVal;
 			return true;
@@ -157,7 +162,7 @@ class Task
 	public function setDescription($newVal)
 	{
 		//Is this safe?
-		if (self::updateTask($id, 'notes', $newVal))
+		if (self::updateTask($this->id, 'notes', $newVal))
 		{
 			$description = $newVal;
 			return true;
@@ -165,21 +170,32 @@ class Task
 		return false;
 	}
 	
+	public function setStatus($newVal)
+	{
+		if (in_array($newVal, self::getStatusOptions()))
+		{
+			if (self::updateTask($this->id, 'status', $newVal))
+			{
+				$description = $newVal;
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	
 	public static function getStatusOptions()
 	{
-		$cxn = open_stream();
-		$sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS
-			WHERE TABLE_NAME = 'Tasks' AND COLUMN_NAME = 'status'";
-		$result = query($cxn, $sql);
-		if ($row = mysqli_fetch_assoc($result))
-		{
-			echo $row['COLUMN_TYPE'];
-			return $row['COLUMN_TYPE'];
-		}
-		else
-		{
-			return null;
-		}
+		//This is a stub that should collect this array programatically
+		// from the database rather than being hardcoded in like this.
+		$stubArray = array();
+		$stubArray[] = "Opened";
+		$stubArray[] = "Waiting on Parts";
+		$stubArray[] = "Waiting on Customer";
+		$stubArray[] = "Waiting on Labor";
+		$stubArray[] = "In Progress";
+		$stubArray[] = "Completed";
+		return $stubArray;
 	}
 	
 	private static function fetchTask($taskTID, $rows = '*')

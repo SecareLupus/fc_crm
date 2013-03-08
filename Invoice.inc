@@ -39,6 +39,11 @@ class Invoice
 		$this->paid = ($contactRow['paid'] == 1);
 	}
 	
+	public function getID()
+	{
+		return $this->id;
+	}
+	
 	public function getActionsTaken()
 	{
 		return $this->actionsArr;
@@ -52,6 +57,57 @@ class Invoice
 	public function getLabourArray()
 	{
 		return $this->labourArr;
+	}
+	
+	public function getPartsCost($tax=0)
+	{
+		$partsCost = 0.00;
+		for($i = 0; $i < count($this->partsArr); $i++)
+		{
+			$partsCost += $this->partsArr[$i]->getCost();
+		}
+		
+		if($tax != 0)
+		{
+			$partsCost += $this->getPartsTax($tax);
+		}
+		return $partsCost;
+	}
+	
+	public function getPartsTax($tax=0)
+	{
+		$taxCost = 0.00;
+		for($i = 0; $i < count($this->partsArr); $i++)
+		{
+			if ($this->partsArr[$i]->isTaxed())
+				$taxCost += ($this->partsArr[$i]->getCost() * $tax);
+		}
+		return $taxCost;
+	}
+	
+	public function getLabourCost()
+	{
+		$labourCost = 0.00;
+		for($i = 0; $i < count($this->labourArr); $i++)
+		{
+			$labourCost += $this->labourArr[$i]->getCost();
+		}
+		return $labourCost;
+	}
+	
+	public function getLabourHours()
+	{
+		$totalHours = 0.0;
+		for($i = 0; $i < count($this->labourArr); $i++)
+		{
+			$totalHours += $this->labourArr[$i]->getHours();
+		}
+		return $totalHours;
+	}
+	
+	public function getCost($tax=0)
+	{
+		return ($this->getPartsCost($tax) + $this->getLabourCost());
 	}
 	
 	public function getReccs()
