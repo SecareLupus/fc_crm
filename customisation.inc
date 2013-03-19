@@ -13,6 +13,7 @@ $CUS_Company_TaxRate = 6.25 * .01;
 $CUS_Company_Website = "www.mrru.us/";
 $CUS_Company_CRMRoot = "CRM/";
 $CUS_Company_Email = "info@mrru.us";
+$CUS_Company_Founded = "2011";
 
 //Employee Title
 //Replace this with your company's title for 
