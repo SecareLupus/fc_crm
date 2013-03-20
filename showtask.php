@@ -71,7 +71,7 @@
 	  $tmpInvoice = new Invoice($invID);
 	  if ($tmpInvoice->isPaid())
 	  {
-		  echo "<a href='showinvoice.php?InvID=$invID'>View Invoice</a>";
+		  echo "<a href='showinvoice.php?InvID=$invID'>View Sales Receipt</a>";
 	  }
 	  else
 	  {
