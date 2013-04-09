@@ -6,39 +6,42 @@
    include('funcs.inc');
    include('member.inc');
    include('header.php');
+   include_once('Contact.inc');
    
    if($_POST['submit'] == 'submit')
    {
 	   extract($_POST);
 	   
-	   $fname = strip_tags($fname);
-	   $lname = strip_tags($lname);
+	   $fname = cleanString($fname);
+	   $lname = cleanString($lname);
 	   if (!check_email_address($email)) die("Invalid Email Address");
 	   $phone = phonenumFromString($phone);
 	   $howfound = cleanString($howfound);
 	   
 	   if (checkName($fname) && checkName($lname) && check_email_address($email))
 	   {
-		$cxn = open_stream();
-		
-		$sql = "INSERT INTO Customers (fname, lname, email, phonenum, howfound, createdOn)
-				VALUES ('$fname', '$lname', '$email', '$phone', '$howfound', NOW())";   
-		if($result = query($cxn, $sql))
+		$thisContact = Contact::createContact();
+		if(is_object($thisContact))
 		{
-			$sql = "SELECT CID from Customers ORDER BY CID DESC LIMIT 1";
-			$result = query($cxn, $sql);
-			echo "$lname, $fname added to the database.<br>";
-			if ($row = mysqli_fetch_assoc($result))
+			$thisContact->setFName($fname, false);
+			$thisContact->setLName($lname, false);
+			$thisContact->setEmail($email, false);
+			$thisContact->setHowFound($howfound, false);
+			$thisContact->setPhone($phone, false);
+			$thisContact = $thisContact->pushUpdate();
+			if(is_object($thisContact))
 			{
-				extract($row);
-				echo "<a href='showcontact.php?CID=$CID'>Click Here to View Customer</a><hr>";
+				echo $thisContact->getLName() . ", " . $thisContact->getFName() . " added to the database.<br>";
+				$CID = $thisContact->getID();
+				echo "<a href='showcontact.php?CID=$CID'>Click Here to View Contact</a><hr>";
 			}
 			else
 			{
-				echo "No link available<hr>";
+				echo "ERROR! Contact not updated.<br>";
 			}
+			
 		}
-		else echo "Error adding customer to database.<hr>";
+		else echo "Error adding contact to database.<hr>";
 	   }
 	   else echo "Error with illegal input.<hr>";
    }

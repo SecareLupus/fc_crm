@@ -15,6 +15,7 @@ class Contact
 	private $phonenum = "";
 	private $email = "";
 	private $howfound = "";
+	private $needsUpdate = array();
 	
 	public function __construct($pullid)
 	{
@@ -31,6 +32,16 @@ class Contact
 	public function getID()
 	{
 		return $this->id;
+	}
+	
+	public function getFName()
+	{
+		return $this->fname;
+	}
+	
+	public function getLName()
+	{
+	   return $this->lname;
 	}
 	
 	public function getName($order=1)
@@ -123,58 +134,132 @@ class Contact
 		return $tmpTasks;
 	}
 	
-	public function setFName($newName)
+	public function setFName($newName, $push=true)
 	{
 		//Is this a real name?
-		if (updateContact($id, 'fname', $newName))
+		$this->needsUpdate['fname'] = $newName;
+		if ($push)
 		{
-			$fname = $newName;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public function setLName($newName)
+	public function setLName($newName, $push=true)
 	{
 		//Is this a real name?
-		if (updateContact($id, 'lname', $newName))
+		$this->needsUpdate['lname'] = $newName;
+		if ($push)
 		{
-			$lname = $newName;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public function setPhone($newNumber)
+	public function setPhone($newNumber, $push=true)
 	{
 		//Strip out everything that isn't a number.
 		//If there are more or less than 10 digits, break.
 		//Else, format as follows: "(ABC) DEF-GHIJ"
-		$newNumber = buildPhoneNum($newNumber);
 		if ($newNumber == null)
 		{
 			return false;
 		}
-		if (updateContact($id, 'phonenum', $newNumber))
+		$this->needsUpdate['phonenum'] = $newNumber;
+		if ($push)
 		{
-			$phonenum = $newNumber;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public function setEmail($newAddress)
+	public function setEmail($newEmail, $push=true)
 	{
-		if (!isLegalEmail($newAddress))
+		//Is this a real name?
+		$this->needsUpdate['email'] = $newEmail;
+		if ($push)
 		{
-			return false;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
 		}
-		if (updateContact($id, 'email', $newAddress))
+		else
 		{
-			$email = $newAddress;
 			return true;
 		}
 		return false;
+	}
+	
+	public function setHowFound($newHF, $push=true)
+	{
+		//Is this a real name?
+		$this->needsUpdate['howfound'] = $newHF;
+		if ($push)
+		{
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public function pushUpdate()
+	{
+		if($this->rawUpdate(array_keys($this->needsUpdate), $this->needsUpdate))
+		{
+			return new Contact($this->id);
+		}
+		return null;
+	}
+	
+	private function rawUpdate($var, $value)
+	{
+		if (self::updateContact($this->id, $var, $value)) return true;
+		return false;
+	}
+	
+	public static function createContact()
+	{
+		$cxn = open_stream();
+		$sql = "INSERT INTO Customers (createdOn) VALUES (NOW())";
+		
+		if($result = query($cxn, $sql))
+		{
+			$sql = "SELECT CID FROM Customers ORDER BY CID DESC LIMIT 1";
+			$result = query($cxn, $sql);
+			if ($row = mysqli_fetch_assoc($result))
+			{
+				return new Contact($row['CID']);
+			}
+		}
+		return null;
 	}
 	
 	private static function fetchContact($ContactCID, $rows = '*')
