@@ -28,6 +28,11 @@ class Contact
 		$this->howfound = $contactRow['howfound'];
 	}
 	
+	public function getID()
+	{
+		return $this->id;
+	}
+	
 	public function getName($order=1)
 	{
 		$tmp = "";

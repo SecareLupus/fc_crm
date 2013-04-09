@@ -6,6 +6,8 @@
    include('funcs.inc');
    include('member.inc');
    include('header.php');
+   include_once('Business.inc');
+   include_once('Address.inc');
    
    if($_POST['submit'] == 'submit')
    {
@@ -17,28 +19,27 @@
 	   $city = cleanString($city);
 	   $state = cleanString($state);
 	   $zip = extractNums($zip);
+	   $address = new Address($street, $city, $state, $zip);
 	   $taxexempt = extractNums($taxexempt);
 	   
 	   if (checkName($name) && checkAlphaNum($state) && checkAlphaNum($zip))
 	   {
-		$cxn = open_stream();
-		
-		$sql = "INSERT INTO Businesses (name, taxexempt, contactCID, street, city, state, zip, phonenum, createdOn)
-				VALUES ('$name', '$taxexempt', '$contactCID', '$street', '$city', '$state', '$zip', '$phone', NOW())";   
-		if($result = query($cxn, $sql))
+		$thisBusiness = Business::createBusiness();
+		if(is_object($thisBusiness))
 		{
-			$sql = "SELECT BID from Businesses ORDER BY BID DESC LIMIT 1";
-			$result = query($cxn, $sql);
-			echo "$name added to the database.<br>";
-			if ($row = mysqli_fetch_assoc($result))
+			$thisBusiness->setName($name, false);
+			$thisBusiness->setContactCID($contactCID, false);
+			$thisBusiness->setPhone($phone, false);
+			$thisBusiness->setAddress($address, false);
+			$thisBusiness->setTaxExempt($taxexempt, false);
+			$thisBusiness = $thisBusiness->pushUpdate();
+			if(is_object($thisBusiness))
 			{
-				extract($row);
+				echo $thisBusiness->getName() . " added to the database.<br>";
+				$BID = $thisBusiness->getID();
 				echo "<a href='showbusiness.php?BID=$BID'>Click Here to View Business</a><hr>";
 			}
-			else
-			{
-				echo "No link available<hr>";
-			}
+			else echo "Error updating business from default.<hr>";
 		}
 		else echo "Error adding business to database.<hr>";
 	   }

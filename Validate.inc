@@ -24,10 +24,10 @@ function buildPhoneNum($string)
 {
 	$numbers = preg_replace("/[^0-9]/", '', $string);
 	$tmpPhone = "(" . substr($numbers, 0, 3) . ") " . substr($numbers, 3, 3) . "-" . substr($numbers, 6, 4);
-	if (isLegalPhoneNum($tmpPhone))
-	{
+	//if (isLegalPhoneNum($tmpPhone))
+	//{
 		return $tmpPhone;
-	}
+	//}
 	return null;
 }
 

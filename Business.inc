@@ -13,7 +13,7 @@ class Business
 	private $taxExempt = "";
 	private $phone = "";
 	private $address = null;
-	//Contact
+	private $needsUpdate = array();
 	
 	public function __construct($pullid)
 	{
@@ -24,6 +24,11 @@ class Business
 		$this->taxExempt = $contactRow['taxexempt'];
 		$this->phone = $contactRow['phonenum'];
 		$this->address = new Address($contactRow['street'], $contactRow['city'], $contactRow['state'], $contactRow['zip']);
+	}
+	
+	public function getID()
+	{
+		return $this->id;
 	}
 	
 	public function getName()
@@ -46,10 +51,10 @@ class Business
 	   return $this->address;
 	}
 	
-	public function getLink()
+	public function getLink($tmpName="")
 	{
 		$tmpid = $this->id;
-		$tmpName = $this->getName();
+		if ($tmpName == "") $tmpName = $this->getName();
 		return "<a href='showbusiness.php?BID=$tmpid'>$tmpName</a>";
 	}
 	
@@ -99,69 +104,149 @@ class Business
 		return $tmpTasks;
 	}
 	
-	public function setName($newName)
+	public function setName($newName, $push=true)
 	{
 		//Is this a real name?
-		if (updateBusiness($id, 'name', $newName))
+		$this->needsUpdate['name'] = $newName;
+		if ($push)
 		{
-			$this->name = $newName;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public function setTaxExempt($newNum)
+	public function setContactCID($newContact, $push=true)
+	{
+		$this->needsUpdate['contactCID'] = $newContact;
+		if ($push)
+		{
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public function setTaxExempt($newNum, $push=true)
 	{
 		//Is this a legal tax exemption number?
-		if (updateBusiness($id, 'taxExempt', $newNum))
+		$this->needsUpdate['taxExempt'] = $newNum;
+		if ($push)
 		{
-			$this->taxExempt = $newNum;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public function setPhone($newNumber)
+	public function setPhone($newNumber, $push=true)
 	{
 		//Strip out everything that isn't a number.
 		//If there are more or less than 10 digits, break.
 		//Else, format as follows: "(ABC) DEF-GHIJ"
-		$newNumber = buildPhoneNum($newNumber);
 		if ($newNumber == null)
 		{
 			return false;
 		}
-		if (updateBusiness($id, 'phonenum', $newNumber))
+		$this->needsUpdate['phonenum'] = $newNumber;
+		if ($push)
 		{
-			$this->phone = $newNumber;
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
 			return true;
 		}
 		return false;
 	}
 	
-	public function setAddress($newAddress)
+	public function setAddress($newAddress, $push=true)
 	{
 		$tmpAddress = $this->address;
-		//This is a real address?		
 		if ($tmpAddress->getStreetAddress() != $newAddress->getStreetAddress())
 		{
-			if (!self::updateBusiness($this->id, 'street', $newAddress->getStreetAddress())) return false;
+			$this->needsUpdate['street'] = $newAddress->getStreetAddress();
 		}
 		if ($tmpAddress->getCity() != $newAddress->getCity())
 		{
-			if (!self::updateBusiness($this->id, 'city', $newAddress->getCity())) return false;
+			$this->needsUpdate['city'] = $newAddress->getCity();
 		}
 		if ($tmpAddress->getState() != $newAddress->getState())
 		{
-			if (!self::updateBusiness($this->id, 'state', $newAddress->getState())) return false;
+			$this->needsUpdate['state'] = $newAddress->getState();
 		}
 		if ($tmpAddress->getZip() != $newAddress->getZip())
 		{
-			if (!self::updateBusiness($this->id, 'zip', $newAddress->getZip())) return false;
+			$this->needsUpdate['zip'] = $newAddress->getZip();
 		}
-		$this->address = $newAddress;
-		return true;
+		
+		if ($push)
+		{
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+		return false;
 	}
+	
+	public function pushUpdate()
+	{
+		if($this->rawUpdate(array_keys($this->needsUpdate), $this->needsUpdate))
+		{
+			return new Business($this->id);
+		}
+		return null;
+	}
+	
+	private function rawUpdate($var, $value)
+	{
+		if (self::updateBusiness($this->id, $var, $value)) return true;
+		return false;
+	}
+	
+	public static function createBusiness()
+	{
+		$cxn = open_stream();
+		$sql = "INSERT INTO Businesses (createdOn) VALUES (NOW())";
+		
+		if($result = query($cxn, $sql))
+		{
+			$sql = "SELECT BID FROM Businesses ORDER BY BID DESC LIMIT 1";
+			$result = query($cxn, $sql);
+			if ($row = mysqli_fetch_assoc($result))
+			{
+				return new Business($row['BID']);
+			}
+		}
+		return null;
+	}
+	
 	
 	private static function fetchBusiness($BID, $rows = '*')
 	{
