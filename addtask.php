@@ -3,47 +3,55 @@
 // sort = 'num' - by member number
 // showmembers.php
 
-   include('funcs.inc');
-   include('member.inc');
-   include('header.php');
-   require('customisation.inc');
-   global $CUS_Category_Name;
-   global $CUS_Assigned_Employee;
-   global $CUS_Task_Summary;
-   
-   if($_POST['submit'] == 'submit')
-   {
-	   extract($_POST);
+	include('funcs.inc');
+	include('member.inc');
+	include('header.php');
+	include_once('Contact.inc');
+	include_once('Business.inc');
+	require('customisation.inc');
+	global $CUS_Category_Name;
+	global $CUS_Assigned_Employee;
+	global $CUS_Task_Summary;
+
+	if($_POST['submit'] == 'submit')
+	{
+		extract($_POST);
 	   
-	   $phonemod = cleanString($phonemod);
-	   $problem = cleanString($problem);
-	   $notes = cleanString($notes);
-	   
-		$cxn = open_stream();
-		
+		$phonemod = cleanString($phonemod);
+		$problem = cleanString($problem);
+		$notes = cleanString($notes);
+		$customer = null;
+		$assignedAgent = new Employee($assignedAgent);
+	   	
 		if($custType == 'Individual')
 		{
-			$sql = "INSERT INTO Tasks (customerID, customerType, createdOn, assignedTo, dueDate, phone, problem, status, notes)
-					VALUES ('$customerInd', 'Individual', NOW(), '$assignedAgent', '$dueDate', '$phonemod', '$problem', '$status', '$notes')";   
+			$customer = new Contact($customerInd);
 		}
 		elseif($custType == 'Business')
 		{
-			$sql = "INSERT INTO Tasks (customerID, customerType, createdOn, assignedTo, dueDate, phone, problem, status, notes)
-					VALUES ('$customerBus', 'Business', NOW(), '$assignedAgent', '$dueDate', '$phonemod', '$problem', '$status', '$notes')";
+			$customer = new Business($customerBus);
 		}
-		if($result = query($cxn, $sql))
+		
+		$thisTask = Task::createTask();
+		if(is_object($thisTask))
 		{
-			$sql = "SELECT TID from Tasks ORDER BY TID DESC LIMIT 1";
-			$result = query($cxn, $sql);
-			echo "New task added to the database.<br>";
-			if ($row = mysqli_fetch_assoc($result))
+			$thisTask->setAssignedEmployee($assignedAgent, false);
+			$thisTask->setStatus($status, false);
+			$thisTask->setDateDue($dueDate, false);
+			$thisTask->setCategory($phonemod, false);
+			$thisTask->setSummary($problem, false);
+			$thisTask->setDescription($notes, false);
+			$thisTask->setCustomer($customer, false);
+			$thisTask = $thisTask->pushUpdate();
+			
+			if (is_object($thisTask))
 			{
-				extract($row);
-				echo "<a href='showtask.php?TID=$TID'>Click Here to View Task</a><hr>";
+				echo "New task added to the database.<br>";
+				echo "<a href='showtask.php?TID=".$thisTask->getID()."'>Click Here to View Task</a><hr>";
 			}
 			else
 			{
-				echo "No link available<hr>";
+				echo "Error during task initialization.<hr>";
 			}
 		}
 		else echo "Error adding task to database.<hr>";
@@ -78,10 +86,20 @@ echo "<script type='text/javascript'>
 		<tr><td>$CUS_Assigned_Employee:</td><td>";
 		selectAgent('assignedAgent', $_SESSION['ID']);
   echo "</td></tr>
-        <tr><td>Customer Type:</td><td>
-        Individual <input type='radio' name='custType' value='Individual' onclick='selectRadio(0)' checked>
-        Business <input type='radio' name='custType' value='Business' onclick='selectRadio(1)'>
-        </td></tr>
+        <tr><td>Customer Type:</td><td>"; 
+  $contactcheck = "";
+  $businesscheck = "";
+  if($_GET['cType'] == 'I')
+  {
+	  $contactcheck = " checked";
+  }
+  if($_GET['cType'] == 'B')
+  {
+	  $businesscheck = " checked";
+  }
+  echo "Individual <input type='radio' name='custType' value='Individual' onclick='selectRadio(0)'".$contactcheck.">";
+  echo "Business <input type='radio' name='custType' value='Business' onclick='selectRadio(1)'".$businesscheck.">";
+  echo "</td></tr>
         <tr><td>Customer:</td><td>";
         selectCustomer('customerInd', (($_GET['cType'] == 'I' && !empty($_GET['custID'])) ? $_GET['custID'] : -1));
         echo "<br>";

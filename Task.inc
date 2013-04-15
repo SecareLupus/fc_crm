@@ -4,6 +4,7 @@
 
 //include('funcs.inc');
 include_once('Contact.inc');
+include_once('Business.inc');
 include_once('Employee.inc');
 include_once('Validate.inc');
 
@@ -13,6 +14,7 @@ class Task
 	private $category = "";
 	private $summary = "";
 	private $description = "";
+	private $needsUpdate = array();
 	
 	public function __construct($pullid)
 	{
@@ -137,65 +139,132 @@ class Task
 		return $tmpdate['createdOn'];
 	}
 	
-	public function setCategory($newVal)
+	public function setCategory($newVal, $push=true)
 	{
-		//Is this safe?
-		if (self::updateTask($this>id, 'phone', $newVal))
-		{
-			$category = $newVal;
-			return true;
-		}
-		return false;
+		$this->needsUpdate['phone'] = $newVal;
+		
+		return $this->pushCheck($push);
 	}
 	
-	public function setSummary($newVal)
+	public function setSummary($newVal, $push=true)
 	{
-		//Is this safe?
-		if (self::updateTask($this->id, 'problem', $newVal))
-		{
-			$summary = $newVal;
-			return true;
-		}
-		return false;
+		$this->needsUpdate['problem'] = $newVal;
+		
+		return $this->pushCheck($push);
 	}
 	
-	public function setDescription($newVal)
+	public function setCustomer($newCust, $push=true)
 	{
-		//Is this safe?
-		if (self::updateTask($this->id, 'notes', $newVal))
+		if($newCust instanceof Contact)
 		{
-			$description = $newVal;
-			return true;
+			$this->needsUpdate['customerType'] = "Individual";
 		}
-		return false;
+		elseif($newCust instanceof Business)
+		{
+			$this->needsUpdate['customerType'] = "Business";
+		}
+		else
+		{
+			return false;
+		}
+		
+		$this->needsUpdate['customerID'] = $newCust->getID();	
+		
+		return $this->pushCheck($push);
 	}
 	
-	public function setStatus($newVal)
+	public function setAssignedEmployee($newEmpl, $push=true)
+	{
+		$newID = -1;
+		if($newEmpl instanceof Employee)
+		{
+			$newID = $newEmpl->getID();
+		}
+		elseif(is_int($newEmpl))
+		{
+			$newID = $newEmpl;
+		}
+		else
+		{
+			return false;
+		}
+		
+		$this->needsUpdate['assignedTo'] = $newID;	
+		
+		return $this->pushCheck($push);
+	}
+	
+	public function setDescription($newVal, $push=true)
+	{
+		$this->needsUpdate['notes'] = $newVal;
+		
+		return $this->pushCheck($push);
+	}
+	
+	public function setDateDue($newDate, $push=true)
+	{
+		$this->needsUpdate['dueDate'] = $newDate;
+		
+		return $this->pushCheck($push);
+	}
+	
+	public function setStatus($newVal, $push=true)
 	{
 		if (in_array($newVal, self::getStatusOptions()))
 		{
-			if (self::updateTask($this->id, 'status', $newVal))
-			{
-				$description = $newVal;
-				return true;
-			}
-			return false;
+			$this->needsUpdate['status'] = $newVal;
+			
+			return $this->pushCheck($push);
 		}
 		return false;
 	}
 	
-	public static function getStatusOptions()
+	public function pushCheck($push)
 	{
-		//This is a stub that should collect this array programatically
-		// from the database rather than being hardcoded in like this.
-		$stubArray = array();
-		$stubArray[] = "Opened";
-		$stubArray[] = "Waiting on Parts";
-		$stubArray[] = "Waiting on Customer";
-		$stubArray[] = "Waiting on Labor";
-		$stubArray[] = "In Progress";
-		$stubArray[] = "Completed";
-		return $stubArray;
+		if ($push)
+		{
+			if ($this->pushUpdate())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public function pushUpdate()
+	{
+		if($this->rawUpdate(array_keys($this->needsUpdate), $this->needsUpdate))
+		{
+			return new Task($this->id);
+		}
+		return null;
+	}
+	
+	private function rawUpdate($var, $value)
+	{
+		if (self::updateTask($this->id, $var, $value)) return true;
+		return false;
+	}
+	
+	public static function createTask()
+	{
+		$cxn = open_stream();
+		$sql = "INSERT INTO Tasks (createdOn) VALUES (NOW())";
+		
+		if($result = query($cxn, $sql))
+		{
+			$sql = "SELECT TID FROM Tasks ORDER BY TID DESC LIMIT 1";
+			$result = query($cxn, $sql);
+			if ($row = mysqli_fetch_assoc($result))
+			{
+				return new Task($row['TID']);
+			}
+		}
+		return null;
 	}
 	
 	private static function fetchTask($taskTID, $rows = '*')
@@ -254,6 +323,20 @@ class Task
 		{
 			return false;
 		}
+	}
+	
+	public static function getStatusOptions()
+	{
+		//This is a stub that should collect this array programatically
+		// from the database rather than being hardcoded in like this.
+		$stubArray = array();
+		$stubArray[] = "Opened";
+		$stubArray[] = "Waiting on Parts";
+		$stubArray[] = "Waiting on Customer";
+		$stubArray[] = "Waiting on Labor";
+		$stubArray[] = "In Progress";
+		$stubArray[] = "Completed";
+		return $stubArray;
 	}
 }
 

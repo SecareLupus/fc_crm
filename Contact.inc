@@ -138,36 +138,16 @@ class Contact
 	{
 		//Is this a real name?
 		$this->needsUpdate['fname'] = $newName;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setLName($newName, $push=true)
 	{
 		//Is this a real name?
 		$this->needsUpdate['lname'] = $newName;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setPhone($newNumber, $push=true)
@@ -180,42 +160,28 @@ class Contact
 			return false;
 		}
 		$this->needsUpdate['phonenum'] = $newNumber;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setEmail($newEmail, $push=true)
 	{
 		//Is this a real name?
 		$this->needsUpdate['email'] = $newEmail;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setHowFound($newHF, $push=true)
 	{
 		//Is this a real name?
 		$this->needsUpdate['howfound'] = $newHF;
+		
+		return $this->pushCheck($push);
+	}
+	
+	public function pushCheck($push)
+	{
 		if ($push)
 		{
 			if ($this->pushUpdate())

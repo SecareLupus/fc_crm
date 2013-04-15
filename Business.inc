@@ -108,53 +108,23 @@ class Business
 	{
 		//Is this a real name?
 		$this->needsUpdate['name'] = $newName;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setContactCID($newContact, $push=true)
 	{
 		$this->needsUpdate['contactCID'] = $newContact;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setTaxExempt($newNum, $push=true)
 	{
 		//Is this a legal tax exemption number?
 		$this->needsUpdate['taxExempt'] = $newNum;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setPhone($newNumber, $push=true)
@@ -167,18 +137,8 @@ class Business
 			return false;
 		}
 		$this->needsUpdate['phonenum'] = $newNumber;
-		if ($push)
-		{
-			if ($this->pushUpdate())
-			{
-				return true;
-			}
-		}
-		else
-		{
-			return true;
-		}
-		return false;
+		
+		return $this->pushCheck($push);
 	}
 	
 	public function setAddress($newAddress, $push=true)
@@ -201,6 +161,11 @@ class Business
 			$this->needsUpdate['zip'] = $newAddress->getZip();
 		}
 		
+		return $this->pushCheck($push);
+	}
+	
+	public function pushCheck($push)
+	{
 		if ($push)
 		{
 			if ($this->pushUpdate())

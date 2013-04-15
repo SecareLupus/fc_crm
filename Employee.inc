@@ -25,6 +25,11 @@ class Employee
 		$this->phone = $contactRow['phone'];
 	}
 	
+	public function getID()
+	{
+		return $this->id;
+	}
+	
 	public function getName($order=1)
 	{
 		$tmp = "";
