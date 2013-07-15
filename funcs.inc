@@ -1073,12 +1073,11 @@ function selectStatus($selName, $default)
 	if (!defined("CACHEENUM"))
 	{
 		$cxn = open_stream();
-		$sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS
-			WHERE TABLE_NAME = 'Tasks' AND COLUMN_NAME = 'status'";
+		$sql = "DESCRIBE Tasks status;";
 		$result = query($cxn, $sql);
 		$row = mysqli_fetch_assoc($result);
 		
-		$colType = $row['COLUMN_TYPE'];
+		$colType = $row['Type'];
 		define("CACHEENUM", str_replace("'", "", substr($colType, 5, (strlen($colType)-6))));
 	}
 	
