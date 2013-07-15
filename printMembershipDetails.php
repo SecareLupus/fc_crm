@@ -24,7 +24,7 @@
 		<td align='center'>Member File</td></tr>
    <tr><td>
 		<table>
-		<td width=100 align='left'>Member #" . $workingIMEI . "</td>
+		<td width=100 align='left'>Member #" . $currSub->getOwner()->getID() . "</td>
 		<td>Lead $CUS_Employee_Title: ";
 			printAgent($_SESSION['ID'], 1);
 echo 	"</td>
@@ -41,9 +41,9 @@ echo 	"</td>
 		echo "<tr><td>IMEI/MEID:</td>";
 		echo "<td>". $currSub->getID() ."</td></tr>";
 		echo "<tr><td>Membership Dues:</td>";
-		echo "<td>". money($currPlan->getPremium()) ."</td></tr>";
+		echo "<td>". money($currPlan->getPremium()) ." per ".$currPlan->getDuration()."</td></tr>";
 		echo "<tr><td>Service Fee:</td>";
-		echo "<td>". money($currPlan->getDeductible()) ."</td></tr>";
+		echo "<td>". money($currPlan->getDeductible()) ." per incident</td></tr>";
 		echo "<tr><td>Status:</td>";
 		$statusText = ($currSub->isActive() ? "Active" : "Inactive");
 		echo "<td>$statusText</td></tr>";		
