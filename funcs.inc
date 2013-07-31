@@ -393,25 +393,21 @@ function lastDayOfMonth($month)
 
 function login($username, $password)
 {
-   if(strlen($username) == 0)
+   if(strlen($username) == 0 && strlen($password) == 0)
    {
       return FALSE;
    }
-   else
+   
+   if(strlen($username) == 0 || strlen($password) == 0)
    {
-	   list($fname, $lname) = explode(".", $username);
-   }
-
-   $stream = open_stream();
-   if(strlen($password) == 0) // if there is no password, cannot log in - no accounts w/o passwords
-   {
-      echo "Login Failed: No Password<br>";
+      echo "Login Failed: Missing Username or Password<br>";
       return FALSE;
    }
 
    $pwdhash = hash('sha256',$password);
-   $query = "SELECT * FROM Agents WHERE ((fname='$fname' AND lname='$lname') OR username='$username') AND password='$pwdhash'";
+   $query = "SELECT AID FROM Agents WHERE username='$username' AND password='$pwdhash'";
 
+   $stream = open_stream();
    if($result = query($stream, $query))
    {
       if(($row = mysqli_fetch_assoc($result)) && ($row['status'] != -1))
