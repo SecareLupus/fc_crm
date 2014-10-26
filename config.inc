@@ -7,10 +7,10 @@
 // takes a database name and a SQL query, returns raw SQL object
 function open_stream()
 {
-  $dbname="haydrejr_mrru_crm";
-  $host="localhost";
-  $user="haydrejr";
-  $pwd="Pkprk8mm!";
+  $dbname="databasename";
+  $host="hostaddress";
+  $user="username";
+  $pwd="password";
 
   $access = new mysqli($host, $user, $pwd, $dbname);
 
