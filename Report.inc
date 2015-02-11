@@ -54,7 +54,22 @@ class Report
 		
 		return $tmpTotal;
 	}
-	
+
+    public function getCombinedLabourUsed()
+	{
+		$tmpLabour = array();
+		foreach($this->data as $tmpInvoice)
+		{
+			$tmpLabourArray = $tmpInvoice->getLabourArray();
+			foreach($tmpLabourArray as $labour)
+			{
+				$name = $labour->getName();
+				$tmpLabour[$name] = 1 + $tmpLabour[$name];
+			}
+		}
+		return $tmpLabour;
+	}
+
 	public function getCombinedPartsUsed()
 	{
 		$tmpParts = array();

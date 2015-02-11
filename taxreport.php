@@ -29,17 +29,28 @@ if ($_POST['submit'] == "Build Report")
 	echo "Total Sales for this Period: " . money($parts + $labour) . "<br>";
 	echo "&nbsp;&nbsp;&nbsp;Parts: " . money($parts) . "<br>";
 	echo "&nbsp;&nbsp;&nbsp;Labour: " . money($labour) . "<br>";
-	echo "Total Tax for this Period: " . money($tax) . "<br><br>";
+	echo "Total Tax for this Period: " . money($tax) . "<hr>";
 	
 	$usedParts = $report->getCombinedPartsUsed();
 	asort($usedParts);
 	$usedParts = array_reverse($usedParts);
-	echo "Parts used in this period:<br>";
-	foreach($usedParts as $key => $value)
-	{
-		echo "$value &nbsp;&nbsp;- &nbsp;&nbsp;$key<br>";
-	}
-	
+
+    echo "Parts used in this period:<br>";
+    foreach($usedParts as $key => $value)
+    {
+        echo "$value &nbsp;&nbsp;- &nbsp;&nbsp;$key<br>";
+    }
+
+    echo "<hr>";
+
+    $usedLabour = $report->getCombinedLabourUsed();
+    asort($usedLabour);
+    $usedLabour = array_reverse($usedLabour);
+    echo "Labour performed in this period:<br>";
+    foreach($usedLabour as $key => $value)
+    {
+        echo "$value &nbsp;&nbsp;- &nbsp;&nbsp;$key<br>";
+    }
 }
 
 ?>
